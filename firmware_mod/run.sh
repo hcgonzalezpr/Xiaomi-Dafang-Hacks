@@ -148,19 +148,17 @@ insmod /driver/sample_motor.ko
 # calibrate,compatible newer models.(But the old DAFANG does not work.）
 # motor calibrate
 
-## Determine the image sensor model:
-insmod /system/sdcard/driver/sinfo.ko
-echo 1 >/proc/jz/sinfo/info
-sensor=$(grep -m1 -oE 'jxf[0-9]*$' /proc/jz/sinfo/info)
-echo "Determined image sensor model as $sensor" >> $LOGPATH
-
-## Start the image sensor:
+## Start Sensor:
 insmod /driver/tx-isp.ko isp_clk=100000000
-if [ $sensor = 'jxf22' ]; then
-  insmod /driver/sensor_jxf22.ko data_interface=2 pwdn_gpio=-1 reset_gpio=18 sensor_gpio_func=0
-else
+if [ -f /driver/sensor_jxf23.ko ]; then
+  # Its a Xioafang 1S
   insmod /driver/sensor_jxf23.ko data_interface=2 pwdn_gpio=-1 reset_gpio=18 sensor_gpio_func=0
+else
+  # Its a Dafang Classic/Wyzecam V2
+  insmod /driver/sensor_jxf22.ko data_interface=2 pwdn_gpio=-1 reset_gpio=18 sensor_gpio_func=0
 fi
+insmod /system/sdcard/driver/sinfo.ko
+
 
 ## Start FTP & SSH Server:
 dropbear_status=$(/system/sdcard/bin/dropbearmulti dropbear -R)
