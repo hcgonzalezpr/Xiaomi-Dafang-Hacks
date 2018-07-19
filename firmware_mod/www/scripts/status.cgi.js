@@ -234,17 +234,4 @@ $(document).ready(function() {
       event.preventDefault();
     });
 
-    $('#flip').change(function() {
-        if($(this).is(":checked")) {
-           // if checked
-           $.ajax({
-            'url': 'cgi-bin/action.cgi?cmd=flip-on',
-           })
-        }  else {
-            $.ajax({
-                'url': 'cgi-bin/action.cgi?cmd=flip-off',
-            })
-        }
-    });
 });
-
