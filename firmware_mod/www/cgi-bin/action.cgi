@@ -178,8 +178,9 @@ if [ -n "$F_cmd" ]; then
     ;;
 
     motor_calibrate)
+      # Current motor driver does not differentiate between horizontal and vertical calibration
       /system/sdcard/bin/motor -d h -s 100
-      /system/sdcard/bin/motor -d v -s 100
+      # /system/sdcard/bin/motor -d v -s 100
     ;;
     
     motor_PTZ)
@@ -222,7 +223,6 @@ if [ -n "$F_cmd" ]; then
     ;;
 
     rtsp_stop)
-      /system/sdcard/controlscripts/rtsp-h264-with-segmentation stop
       /system/sdcard/controlscripts/rtsp-mjpeg stop
       /system/sdcard/controlscripts/rtsp-h264 stop
     ;;
@@ -340,10 +340,12 @@ if [ -n "$F_cmd" ]; then
     ;;
 
     flip-on)
+      rewrite_config /system/sdcard/config/rtspserver.conf FLIP "ON"
       /system/sdcard/bin/setconf -k f -v 1
     ;;
 
     flip-off)
+      rewrite_config /system/sdcard/config/rtspserver.conf FLIP "OFF"
       /system/sdcard/bin/setconf -k f -v 0
     ;;
 
